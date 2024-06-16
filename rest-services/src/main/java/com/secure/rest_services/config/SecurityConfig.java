@@ -20,9 +20,10 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
-        http.authorizeHttpRequests((requests) -> requests
+        http.csrf(csrf -> csrf.disable()).
+                authorizeHttpRequests((requests) -> requests
                 .requestMatchers("/api/**").authenticated()
-                .requestMatchers("/public/**").permitAll())
+                .requestMatchers("/public/**","/register").permitAll())
                 .formLogin(Customizer.withDefaults())
                 .httpBasic(Customizer.withDefaults());
         return http.build();
@@ -48,9 +49,9 @@ public class SecurityConfig {
         return NoOpPasswordEncoder.getInstance();
     }
 
-    @Bean
+    /*@Bean
     public UserDetailsService userDetailsService(DataSource dataSource)
     {
         return new JdbcUserDetailsManager(dataSource);
-    }
+    }*/
 }
